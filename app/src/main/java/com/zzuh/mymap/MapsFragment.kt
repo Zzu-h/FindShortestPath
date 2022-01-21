@@ -1,72 +1,71 @@
 package com.zzuh.mymap
 
-import androidx.appcompat.app.AppCompatActivity
+import android.app.Activity
+import android.content.Context
+import androidx.fragment.app.Fragment
+
 import android.os.Bundle
 import android.util.Log
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import android.widget.Toast
-import androidx.annotation.UiThread
 import androidx.core.app.ActivityCompat
-import androidx.recyclerview.widget.DividerItemDecoration
-import androidx.recyclerview.widget.LinearLayoutManager
-import com.naver.maps.map.LocationTrackingMode
+
 import com.naver.maps.map.NaverMap
 import com.naver.maps.map.OnMapReadyCallback
 import com.naver.maps.map.UiSettings
 import com.naver.maps.map.overlay.Marker
 import com.naver.maps.map.overlay.Overlay
 import com.naver.maps.map.util.FusedLocationSource
-
-import com.zzuh.mymap.databinding.ActivityMapsBinding
+import com.zzuh.mymap.databinding.FragmentMapsBinding
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.converter.scalars.ScalarsConverterFactory
-import java.util.jar.Manifest
 
-class MapsActivity : AppCompatActivity(), OnMapReadyCallback, Overlay.OnClickListener {
+class MapsFragment : Fragment(), OnMapReadyCallback, Overlay.OnClickListener {
+    companion object {
+        private const val LOCATION_PERMISSION_REQUEST_CODE = 1000
+    }
 
-    // Activity UI 관련 변수
-    private lateinit var binding: ActivityMapsBinding
-    private lateinit var recyclerViewAdapter: MarkerAdapter
+    // Fragment UI
+    private lateinit var selectedListAdapter: MarkerAdapter
+    private lateinit var binding: FragmentMapsBinding
+    private lateinit var mainActivity: Activity
 
     // Naver Map 관련 변수
     private lateinit var locationSource: FusedLocationSource
     private lateinit var mapUiSettings: UiSettings
     private lateinit var naverMap: NaverMap
 
-
-    private var markerData = mutableListOf<Marker>()
-    private var addressData = mutableListOf<String>()
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        CLIENT_ID = getString(R.string.client_id)
-        CLIENT_SECRET = getString(R.string.client_secret)
-        BASE_URL_NAVER_API = getString(R.string.baseUrl)
-
-        binding = ActivityMapsBinding.inflate(layoutInflater)
-        setContentView(binding.root)
-
-        locationSource = FusedLocationSource(this, LOCATION_PERMISSION_REQUEST_CODE)
-
-        recyclerViewAdapter = MarkerAdapter(addressData, markerData)
-        binding.bottomLayout.recyclerView.adapter = recyclerViewAdapter
-        binding.bottomLayout.recyclerView.layoutManager = LinearLayoutManager(this)
-
-        Log.d("tester", "testing2")
-        binding.map.getMapAsync(this)
+        binding = FragmentMapsBinding.inflate(layoutInflater)
     }
 
-    //@UiThread
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        locationSource = FusedLocationSource(this, LOCATION_PERMISSION_REQUEST_CODE)
+        return binding.root
+    }
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        mainActivity = context as Activity
+    }
+
     override fun onMapReady(naverMap: NaverMap) {
         mapUiSettings = naverMap.uiSettings
         naverMap.locationSource = locationSource
 
         ActivityCompat.requestPermissions(
-            this,
+            mainActivity,
             arrayOf(
                 android.Manifest.permission.ACCESS_FINE_LOCATION,
                 android.Manifest.permission.ACCESS_COARSE_LOCATION
@@ -79,34 +78,14 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, Overlay.OnClickLis
         mapUiSettings.isLocationButtonEnabled = true
 
         naverMap.setOnMapClickListener { pointF, latLng ->
-            Toast.makeText(this, "${latLng.latitude}, ${latLng.longitude}",Toast.LENGTH_SHORT).show()
+            Toast.makeText(mainActivity, "${latLng.latitude}, ${latLng.longitude}", Toast.LENGTH_SHORT).show()
             val marker = Marker()
             marker.position = latLng
             marker.setOnClickListener(this)
 
-            getAddressForLanLong(marker, addressData.size)
+            getAddressForLanLong(marker, 0)//addressData.size)
         }
         this.naverMap = naverMap
-    }
-
-    override fun onRequestPermissionsResult(
-        requestCode: Int,
-        permissions: Array<out String>,
-        grantResults: IntArray
-    ) {
-        if(locationSource.onRequestPermissionsResult(requestCode,permissions,grantResults)){
-            if(locationSource.isActivated)
-                naverMap.locationTrackingMode = LocationTrackingMode.Follow
-            else {
-                naverMap.locationTrackingMode = LocationTrackingMode.None
-                return
-            }
-        }
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-    }
-
-    companion object {
-        private const val LOCATION_PERMISSION_REQUEST_CODE = 1000
     }
 
     override fun onClick(overlay: Overlay): Boolean {
@@ -120,13 +99,13 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, Overlay.OnClickLis
                     break
                 }
             }
-            recyclerViewAdapter.notifyDataSetChanged()
+            // selectedListAdapter.notifyDataSetChanged()
             return true
         }
         return false
     }
 
-    fun getAddressForLanLong(marker: Marker, index: Int): String{
+    fun getAddressForLanLong(marker: Marker, index: Int){
         val lanlong = "${marker.position.longitude},${marker.position.latitude}"
         //val lanlong = "${marker.position.latitude},${marker.position.longitude}"
         Log.d("tester", lanlong)
@@ -154,7 +133,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, Overlay.OnClickLis
                 }
                 marker.map = naverMap
                 markerData.add(marker)
-                recyclerViewAdapter.notifyDataSetChanged()
+                //selectedListAdapter.notifyDataSetChanged()
             }
 
             override fun onFailure(call: Call<AddressResult>, t: Throwable) {
@@ -162,8 +141,5 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, Overlay.OnClickLis
                 t.printStackTrace()
             }
         })
-        return if(result != null){
-            addressData.last()
-        } else "No Data"
     }
 }

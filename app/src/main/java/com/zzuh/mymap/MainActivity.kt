@@ -3,40 +3,31 @@ package com.zzuh.mymap
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
 import androidx.viewpager2.adapter.FragmentStateAdapter
+import com.naver.maps.map.overlay.Marker
 import com.zzuh.mymap.databinding.ActivityMainBinding
 
-class MainRecyclerViewAdapter(activity: MainActivity, fragmentList: List<Fragment>): FragmentStateAdapter(activity){
-    val fragments = fragmentList
-    override fun getItemCount(): Int = fragments.size
-    override fun createFragment(position: Int): Fragment =fragments[position]
-}
+var CLIENT_ID = ""//= R.string.client_id.toString()
+var CLIENT_SECRET = ""// R.string.client_secret.toString()
+var BASE_URL_NAVER_API = "" //R.string.baseUrl.toString()
+
+var markerData = mutableListOf<Marker>()
+var addressData = mutableListOf<String>()
 
 class MainActivity : AppCompatActivity() {
-    lateinit var fragmentTransaction: FragmentTransaction
-    lateinit var fragmentManager: FragmentManager
-    lateinit var fragmentRecyclerViewAdapter: MainRecyclerViewAdapter
     lateinit var binding: ActivityMainBinding
-
-    lateinit var resultFragment: Fragment
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        CLIENT_ID = getString(R.string.client_id)
+        CLIENT_SECRET = getString(R.string.client_secret)
+        BASE_URL_NAVER_API = getString(R.string.baseUrl)
+
         binding = ActivityMainBinding.inflate(layoutInflater)
-        fragmentManager = supportFragmentManager
-        fragmentTransaction = fragmentManager.beginTransaction()
-
-        fragmentRecyclerViewAdapter = MainRecyclerViewAdapter(this, listOf())
-
-        // Result page 추가
-        resultFragment = ResultFragment()
-        fragmentTransaction.add(R.id.mainFrameLayout, resultFragment)
-        fragmentTransaction.commit()
-
-        // button 추가
-
         setContentView(binding.root)
     }
 }

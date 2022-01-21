@@ -26,6 +26,8 @@ class MainActivity : AppCompatActivity() {
     lateinit var mapsFragment: MapsFragment
     lateinit var bottomSheetFragment: BottomSheetFragment
 
+    var notifyCallback: () -> Unit = {}
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 

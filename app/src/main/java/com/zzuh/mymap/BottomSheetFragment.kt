@@ -40,10 +40,8 @@ class BottomSheetFragment : Fragment() {
         selectedListFragment = SelectedListFragment()
         resultFragment = ResultFragment()
         bottomLifecycle = lifecycle
-        //bottomSheetPagerAdapter = BottomSheetPagerAdapter(childFragmentManager, bottomLifecycle, listOf(resultFragment))
 
         // 중첩스크롤 다시보기
-        Log.d("Tester", "Testing")
         bottomSheetPagerAdapter = BottomSheetPagerAdapter(bottomSheetActivity, listOf(selectedListFragment, resultFragment))
         binding.bottomViewPager.offscreenPageLimit = 2
         binding.bottomViewPager.adapter = bottomSheetPagerAdapter

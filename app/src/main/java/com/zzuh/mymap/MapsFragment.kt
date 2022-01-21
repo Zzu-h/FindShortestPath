@@ -5,6 +5,8 @@ import android.content.Context
 import androidx.fragment.app.Fragment
 
 import android.os.Bundle
+import android.os.Handler
+import android.os.Message
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -26,7 +28,8 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.converter.scalars.ScalarsConverterFactory
 
-class MapsFragment : Fragment(), OnMapReadyCallback, Overlay.OnClickListener {
+class MapsFragment : Fragment(), OnMapReadyCallback, Overlay.OnClickListener, Handler.Callback {
+
     companion object {
         private const val LOCATION_PERMISSION_REQUEST_CODE = 1000
     }
@@ -54,6 +57,10 @@ class MapsFragment : Fragment(), OnMapReadyCallback, Overlay.OnClickListener {
         locationSource = FusedLocationSource(this, LOCATION_PERMISSION_REQUEST_CODE)
         binding.map.getMapAsync(this)
         return binding.root
+    }
+
+    override fun handleMessage(p0: Message): Boolean {
+        TODO("Not yet implemented")
     }
 
     override fun onAttach(context: Context) {
@@ -135,6 +142,8 @@ class MapsFragment : Fragment(), OnMapReadyCallback, Overlay.OnClickListener {
                 marker.map = naverMap
                 markerData.add(marker)
                 //selectedListAdapter.notifyDataSetChanged()
+
+                (activity as MainActivity).notifyCallback()
             }
 
             override fun onFailure(call: Call<AddressResult>, t: Throwable) {

@@ -20,6 +20,12 @@ var addressData = mutableListOf<String>()
 class MainActivity : AppCompatActivity() {
     lateinit var binding: ActivityMainBinding
 
+    lateinit var transaction: FragmentTransaction
+    lateinit var fragmentManager: FragmentManager
+
+    lateinit var mapsFragment: MapsFragment
+    lateinit var bottomSheetFragment: BottomSheetFragment
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -29,5 +35,15 @@ class MainActivity : AppCompatActivity() {
 
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        mapsFragment = MapsFragment()
+        bottomSheetFragment = BottomSheetFragment()
+
+        fragmentManager = supportFragmentManager
+        transaction = fragmentManager.beginTransaction()
+
+        transaction.add(R.id.maps_fragment, mapsFragment)
+        transaction.add(R.id.bottom_sheet_fragment, bottomSheetFragment)
+        transaction.commit()
     }
 }

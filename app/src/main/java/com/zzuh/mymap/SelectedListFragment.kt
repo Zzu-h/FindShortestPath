@@ -19,6 +19,6 @@ class SelectedListFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? = binding.root
+    ): View = binding.root
 
 }

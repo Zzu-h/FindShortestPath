@@ -52,6 +52,7 @@ class MapsFragment : Fragment(), OnMapReadyCallback, Overlay.OnClickListener {
         savedInstanceState: Bundle?
     ): View? {
         locationSource = FusedLocationSource(this, LOCATION_PERMISSION_REQUEST_CODE)
+        binding.map.getMapAsync(this)
         return binding.root
     }
 

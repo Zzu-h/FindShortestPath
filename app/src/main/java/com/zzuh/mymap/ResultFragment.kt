@@ -7,25 +7,13 @@ import android.view.View
 import android.view.ViewGroup
 import com.zzuh.mymap.databinding.FragmentResultBinding
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
-
 class ResultFragment : Fragment() {
     lateinit var binding: FragmentResultBinding
-    private var param1: String? = null
-    private var param2: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         binding = FragmentResultBinding.inflate(layoutInflater)
-
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
     }
 
     override fun onCreateView(
@@ -33,16 +21,5 @@ class ResultFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         return binding.root//inflater.inflate(R.layout.fragment_result, container, false)
-    }
-
-    companion object {
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            ResultFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
-            }
     }
 }

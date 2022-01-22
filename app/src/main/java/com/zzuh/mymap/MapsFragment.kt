@@ -1,6 +1,5 @@
 package com.zzuh.mymap
 
-import android.app.Activity
 import android.content.Context
 import androidx.fragment.app.Fragment
 
@@ -123,7 +122,7 @@ class MapsFragment : Fragment(), OnMapReadyCallback, Overlay.OnClickListener, Ha
             .addConverterFactory(ScalarsConverterFactory.create())
             .addConverterFactory(GsonConverterFactory.create())
             .build()
-        val api = retrofit.create(AddressInfo::class.java)
+        val api = retrofit.create(AddresInfo::class.java)
         val callGetSearch = api.getAddress(CLIENT_ID, CLIENT_SECRET, lanlong, "json", "roadaddr")
         var result: AddressResult? = null
         callGetSearch.enqueue(object : Callback<AddressResult> {

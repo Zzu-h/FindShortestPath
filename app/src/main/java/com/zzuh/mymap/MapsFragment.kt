@@ -37,7 +37,7 @@ class MapsFragment : Fragment(), OnMapReadyCallback, Overlay.OnClickListener, Ha
     // Fragment UI
     private lateinit var selectedListAdapter: MarkerAdapter
     private lateinit var binding: FragmentMapsBinding
-    private lateinit var mainActivity: Activity
+    private lateinit var mainActivity: MainActivity
 
     // Naver Map 관련 변수
     private lateinit var locationSource: FusedLocationSource
@@ -65,7 +65,7 @@ class MapsFragment : Fragment(), OnMapReadyCallback, Overlay.OnClickListener, Ha
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
-        mainActivity = context as Activity
+        mainActivity = context as MainActivity
     }
 
     override fun onMapReady(naverMap: NaverMap) {
@@ -107,6 +107,7 @@ class MapsFragment : Fragment(), OnMapReadyCallback, Overlay.OnClickListener, Ha
                     break
                 }
             }
+            mainActivity.notifyCallback()
             // selectedListAdapter.notifyDataSetChanged()
             return true
         }
@@ -142,8 +143,8 @@ class MapsFragment : Fragment(), OnMapReadyCallback, Overlay.OnClickListener, Ha
                 marker.map = naverMap
                 markerData.add(marker)
                 //selectedListAdapter.notifyDataSetChanged()
-
-                (activity as MainActivity).notifyCallback()
+                Log.d("Tester", "send notify")
+                mainActivity.notifyCallback()
             }
 
             override fun onFailure(call: Call<AddressResult>, t: Throwable) {

@@ -14,6 +14,11 @@
         android:background="@drawable/common_google_signin_btn_text_dark"
         android:clickable="true"
         />
+    <androidx.core.widget.ContentLoadingProgressBar
+
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="visible"/>
     <include
         layout="@layout/fragment_maps"
         android:id="@+id/maps_fragment"

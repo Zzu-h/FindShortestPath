@@ -1,6 +1,7 @@
 package com.zzuh.mymap
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -21,6 +22,7 @@ class SelectedListFragment : Fragment() {
         binding.selectedListRecyclerView.adapter = adapter
 
         (activity as MainActivity).notifyCallback = {
+            Log.d("Tester", "catch notify")
             adapter.notifyDataSetChanged()
         }
     }

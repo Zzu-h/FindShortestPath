@@ -1,6 +1,5 @@
 package com.zzuh.mymap
 
-import android.app.Activity
 import android.content.Context
 import androidx.fragment.app.Fragment
 
@@ -37,7 +36,7 @@ class MapsFragment : Fragment(), OnMapReadyCallback, Overlay.OnClickListener, Ha
     // Fragment UI
     private lateinit var selectedListAdapter: MarkerAdapter
     private lateinit var binding: FragmentMapsBinding
-    private lateinit var mainActivity: Activity
+    private lateinit var mainActivity: MainActivity
 
     // Naver Map 관련 변수
     private lateinit var locationSource: FusedLocationSource
@@ -65,7 +64,7 @@ class MapsFragment : Fragment(), OnMapReadyCallback, Overlay.OnClickListener, Ha
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
-        mainActivity = context as Activity
+        mainActivity = context as MainActivity
     }
 
     override fun onMapReady(naverMap: NaverMap) {
@@ -107,6 +106,7 @@ class MapsFragment : Fragment(), OnMapReadyCallback, Overlay.OnClickListener, Ha
                     break
                 }
             }
+            mainActivity.notifyCallback()
             // selectedListAdapter.notifyDataSetChanged()
             return true
         }
@@ -122,7 +122,7 @@ class MapsFragment : Fragment(), OnMapReadyCallback, Overlay.OnClickListener, Ha
             .addConverterFactory(ScalarsConverterFactory.create())
             .addConverterFactory(GsonConverterFactory.create())
             .build()
-        val api = retrofit.create(AddressInfo::class.java)
+        val api = retrofit.create(AddresInfo::class.java)
         val callGetSearch = api.getAddress(CLIENT_ID, CLIENT_SECRET, lanlong, "json", "roadaddr")
         var result: AddressResult? = null
         callGetSearch.enqueue(object : Callback<AddressResult> {
@@ -142,8 +142,8 @@ class MapsFragment : Fragment(), OnMapReadyCallback, Overlay.OnClickListener, Ha
                 marker.map = naverMap
                 markerData.add(marker)
                 //selectedListAdapter.notifyDataSetChanged()
-
-                (activity as MainActivity).notifyCallback()
+                Log.d("Tester", "send notify")
+                mainActivity.notifyCallback()
             }
 
             override fun onFailure(call: Call<AddressResult>, t: Throwable) {

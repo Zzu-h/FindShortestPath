@@ -79,9 +79,6 @@ class MapsFragment : Fragment(), OnMapReadyCallback, Overlay.OnClickListener, Ha
             ),
             LOCATION_PERMISSION_REQUEST_CODE
         )
-        //
-        Log.d("tester", "testing")
-
         mapUiSettings.isLocationButtonEnabled = true
 
         naverMap.setOnMapClickListener { pointF, latLng ->

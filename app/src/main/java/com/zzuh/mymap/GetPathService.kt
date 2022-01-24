@@ -65,7 +65,6 @@ class GetPathService : Service() {
     }
 
     override fun onCreate() {
-        messenger = Messenger(InCommingHandler(this))
         retrofit = Retrofit.Builder()
             .baseUrl(BASE_URL_NAVER_API)
             .addConverterFactory(ScalarsConverterFactory.create())
@@ -74,7 +73,10 @@ class GetPathService : Service() {
         api = retrofit.create(FindPathInfo::class.java)
         super.onCreate()
     }
-    override fun onBind(intent: Intent): IBinder = messenger.binder
+    override fun onBind(intent: Intent): IBinder {
+        messenger = Messenger(InCommingHandler(this))
+        return messenger.binder
+    }
 
     private fun requestPaths(){ }
     private fun calculatePaths(){ }

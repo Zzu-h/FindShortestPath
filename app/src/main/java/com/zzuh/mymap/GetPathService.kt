@@ -27,6 +27,11 @@ class GetPathService : Service() {
     lateinit var retrofit: Retrofit
     lateinit var api: FindPathInfo
 
+    var pathResultSets = Array(10, {Array<PathResult?>(10, { null })})
+    var shortestPaths = emptyArray<PathResult>()
+    var endCount = 0
+    var dataSize = 0
+
     inner class InCommingHandler(
         context: Context,
         private val applicationContext: Context = context.applicationContext
@@ -37,7 +42,8 @@ class GetPathService : Service() {
                     // connection 되자마자 시작되는 메소드 / 초기 설정
                     replyMessenger = msg.replyTo
                     Log.d("tester Service", "Receive code CONNECT_OK")
-
+                    dataSize = markerData.size - 1
+                    endCount = dataSize * dataSize
                     val replyMsg = Message()
                     replyMsg.what = READY_SERVICE
 
@@ -46,8 +52,12 @@ class GetPathService : Service() {
                 GET_PATHS -> {
                     Log.d("tester Service", "Receive code GET_PATHS")
                     requestPaths()
+                    while(endCount > 0){ null }
                     val replyMsg = Message()
-                    replyMsg.what = GET_SERVICE_DONE
+
+                    replyMsg.what =
+                    if(endCount < 0) GET_SERVICE_DONE
+                    else GET_SERVICE_DONE
 
                     replyMessenger.send(replyMsg)
                 }
@@ -78,10 +88,19 @@ class GetPathService : Service() {
         return messenger.binder
     }
 
-    private fun requestPaths(){ }
+    private fun requestPaths(){
+        for(startIndex in 0..dataSize)
+            for(goalIndex in 0..dataSize){
+                if (endCount < 0) return
+                else if (startIndex == goalIndex) continue
+                else getPaths(startIndex, goalIndex)
+            }
+    }
     private fun calculatePaths(){ }
 
-    fun getPaths(markerStart: Marker, markerGoal: Marker){
+    fun getPaths(startIndex: Int, goalIndex: Int){
+        var markerStart = markerData[startIndex]
+        var markerGoal = markerData[goalIndex]
         val callGetSearch = api.getPath(
             CLIENT_ID, CLIENT_SECRET,
             "${markerStart.position.longitude},${markerStart.position.latitude}",
@@ -91,13 +110,14 @@ class GetPathService : Service() {
         var result: PathResult? = null
         callGetSearch.enqueue(object : Callback<PathResult> {
             override fun onFailure(call: Call<PathResult>, t: Throwable) {
-                TODO("Not yet implemented")
                 Log.d("결과:", "실패 : $t")
+                endCount = -1
             }
 
             override fun onResponse(call: Call<PathResult>, response: Response<PathResult>) {
-                TODO("Not yet implemented")
-                result = response.body()
+                result = response.body() as PathResult
+                pathResultSets[startIndex][goalIndex] = result!!
+                endCount -= 1
             }
         })
     }

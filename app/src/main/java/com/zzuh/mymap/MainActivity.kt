@@ -1,5 +1,6 @@
 package com.zzuh.mymap
 
+import android.app.Activity
 import android.app.Dialog
 import android.content.ComponentName
 import android.content.Context
@@ -18,6 +19,7 @@ import androidx.appcompat.app.AlertDialog
 import com.zzuh.mymap.MessageCode.CAL_PATHS
 import com.zzuh.mymap.MessageCode.CAL_SERVICE_DONE
 import com.zzuh.mymap.MessageCode.CONNECT_OK
+import com.zzuh.mymap.MessageCode.ERROR_CODE
 import com.zzuh.mymap.MessageCode.GET_PATHS
 import com.zzuh.mymap.MessageCode.GET_SERVICE_DONE
 import com.zzuh.mymap.MessageCode.READY_SERVICE
@@ -39,6 +41,7 @@ object MessageCode {
     const val CONNECT_OK = 100
     const val GET_PATHS = 200
     const val CAL_PATHS = 300
+    const val ERROR_CODE = 400
 }
 
 class MainActivity : AppCompatActivity() {
@@ -84,6 +87,13 @@ class MainActivity : AppCompatActivity() {
                     Log.d("tester Activity", "Receive code CAL_SERVICE_DONE")
                     unbindService(connection)
                     loadingTextView.text = "처리가 완료되었습니다!"
+                    dialog.dismiss()
+                }
+                ERROR_CODE -> {
+                    Log.d("tester Activity", "Receive code ERROR_CODE")
+                    unbindService(connection)
+                    loadingTextView.text = "ERROR"
+                    Toast.makeText(this as Activity, "경로를 받아오는데 실패했습니다. 다시시도해 주세", Toast.LENGTH_SHORT).show()
                     dialog.dismiss()
                 }
                 else -> super.handleMessage(msg)
@@ -141,7 +151,7 @@ class MainActivity : AppCompatActivity() {
             if(searchButtonClick) {
                 // get current position
                 if(markerData.size == 0){
-                    Toast.makeText(this, "error",Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, "하나 이상의 지점을 선택해 주세요.",Toast.LENGTH_SHORT).show()
                     return@setOnClickListener
                 }
                 mapsFragment.getCurrentLanLong()

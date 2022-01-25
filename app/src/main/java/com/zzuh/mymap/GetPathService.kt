@@ -9,6 +9,7 @@ import com.naver.maps.map.overlay.Marker
 import com.zzuh.mymap.MessageCode.CAL_PATHS
 import com.zzuh.mymap.MessageCode.CAL_SERVICE_DONE
 import com.zzuh.mymap.MessageCode.CONNECT_OK
+import com.zzuh.mymap.MessageCode.ERROR_CODE
 import com.zzuh.mymap.MessageCode.GET_PATHS
 import com.zzuh.mymap.MessageCode.GET_SERVICE_DONE
 import com.zzuh.mymap.MessageCode.READY_SERVICE
@@ -56,7 +57,7 @@ class GetPathService : Service() {
                     val replyMsg = Message()
 
                     replyMsg.what =
-                    if(endCount < 0) GET_SERVICE_DONE
+                    if(endCount < 0) ERROR_CODE
                     else GET_SERVICE_DONE
 
                     replyMessenger.send(replyMsg)

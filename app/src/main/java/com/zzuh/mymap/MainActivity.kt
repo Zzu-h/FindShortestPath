@@ -138,7 +138,9 @@ class MainActivity : AppCompatActivity() {
         binding.searchButton.setOnClickListener {
             Log.d("Tester", "click the Search button")
             if(searchButtonClick) {
-                //getPaths()
+                // get current position
+                mapsFragment.getCurrentLanLong()
+
                 // Loading dialog
                 searchButtonClick = false
                 dialog.show()

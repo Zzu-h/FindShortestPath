@@ -1,6 +1,8 @@
 package com.zzuh.mymap
 
 import android.content.Context
+import android.graphics.Color
+import android.location.Location
 import androidx.fragment.app.Fragment
 
 import android.os.Bundle
@@ -12,6 +14,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
+import com.naver.maps.geometry.LatLng
 
 import com.naver.maps.map.NaverMap
 import com.naver.maps.map.OnMapReadyCallback
@@ -19,6 +22,7 @@ import com.naver.maps.map.UiSettings
 import com.naver.maps.map.overlay.Marker
 import com.naver.maps.map.overlay.Overlay
 import com.naver.maps.map.util.FusedLocationSource
+import com.naver.maps.map.util.MarkerIcons
 import com.zzuh.mymap.databinding.FragmentMapsBinding
 import retrofit2.Call
 import retrofit2.Callback
@@ -42,6 +46,9 @@ class MapsFragment : Fragment(), OnMapReadyCallback, Overlay.OnClickListener, Ha
     private lateinit var locationSource: FusedLocationSource
     private lateinit var mapUiSettings: UiSettings
     private lateinit var naverMap: NaverMap
+    private lateinit var location: Location
+    private var latitude = 0.0
+    private var longitude = 0.0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -70,6 +77,13 @@ class MapsFragment : Fragment(), OnMapReadyCallback, Overlay.OnClickListener, Ha
     override fun onMapReady(naverMap: NaverMap) {
         mapUiSettings = naverMap.uiSettings
         naverMap.locationSource = locationSource
+
+        naverMap.addOnLocationChangeListener{
+            location -> {
+                latitude = location.latitude
+                longitude = location.longitude
+        }
+        }
 
         ActivityCompat.requestPermissions(
             mainActivity,
@@ -108,6 +122,15 @@ class MapsFragment : Fragment(), OnMapReadyCallback, Overlay.OnClickListener, Ha
             return true
         }
         return false
+    }
+
+    fun getCurrentLanLong(){
+        var marker = Marker()
+        marker.position = LatLng(latitude,longitude)
+        marker.map = naverMap
+        marker.icon = MarkerIcons.BLACK
+        marker.iconTintColor = Color.RED
+        getAddressForLanLong(marker, 0)
     }
 
     fun getAddressForLanLong(marker: Marker, index: Int){

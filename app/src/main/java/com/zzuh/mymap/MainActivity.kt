@@ -13,6 +13,7 @@ import android.content.Intent
 import android.content.ServiceConnection
 import android.os.*
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import com.zzuh.mymap.MessageCode.CAL_PATHS
 import com.zzuh.mymap.MessageCode.CAL_SERVICE_DONE
@@ -139,6 +140,10 @@ class MainActivity : AppCompatActivity() {
             Log.d("Tester", "click the Search button")
             if(searchButtonClick) {
                 // get current position
+                if(markerData.size == 0){
+                    Toast.makeText(this, "error",Toast.LENGTH_SHORT).show()
+                    return@setOnClickListener
+                }
                 mapsFragment.getCurrentLanLong()
 
                 // Loading dialog

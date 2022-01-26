@@ -20,6 +20,45 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.converter.scalars.ScalarsConverterFactory
 
+class FindShortestPath{
+    var W = Array(10, {Array<Int>(10, { -1 })})
+    var n = 0
+
+    val visited = BooleanArray(16){false}
+    val city = IntArray(16){ -1 }
+    var minCost = 987654321
+    val minCity = IntArray(16){ -1 }
+
+    fun setDistArray(y: Int, x: Int, value: Int) { W[y][x] = value }
+
+    fun getPaths(): IntArray {
+        tsp()
+        return city
+    }
+
+    private fun tsp(node: Int, costSum: Int, count: Int){
+        visited[node] = true
+        city[count-1] = node
+        if(count == n){
+            if(costSum < minCost) {
+                for (i in 0..(n - 1)) {
+                    minCity[i] = city[i]
+                }
+                minCost = costSum
+            }
+            visited[node] = false
+            city[count-1] = -1
+            return
+        }
+        for(i in 0..(n-1)){
+            if(!visited[i] && W[node][i] != 0)
+                tsp(i, costSum+W[node][i], count+1)
+        }
+        visited[node] = false
+        city[count-1] = -1
+    }
+}
+
 class GetPathService : Service() {
 
     lateinit var messenger: Messenger
@@ -32,6 +71,8 @@ class GetPathService : Service() {
     var shortestPaths = emptyArray<PathResult>()
     var endCount = 0
     var dataSize = 0
+
+    var findPaths: FindShortestPath = FindShortestPath()
 
     inner class InCommingHandler(
         context: Context,
@@ -97,7 +138,8 @@ class GetPathService : Service() {
                 else getPaths(startIndex, goalIndex)
             }
     }
-    private fun calculatePaths(){ }
+    private fun calculatePaths(){
+    }
 
     fun getPaths(startIndex: Int, goalIndex: Int){
         var markerStart = markerData[startIndex]

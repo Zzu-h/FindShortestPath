@@ -31,8 +31,9 @@ class FindShortestPath{
 
     fun setDistArray(y: Int, x: Int, value: Int) { W[y][x] = value }
 
-    fun getPaths(): IntArray {
-        tsp()
+    fun getPaths(size: Int): IntArray {
+        n = size
+        tsp(n-1,0,1)
         return city
     }
 
@@ -69,6 +70,7 @@ class GetPathService : Service() {
 
     var pathResultSets = Array(10, {Array<PathResult?>(10, { null })})
     var shortestPaths = emptyArray<PathResult>()
+    var shortestNodePaths = IntArray(16)
     var endCount = 0
     var dataSize = 0
 
@@ -139,6 +141,13 @@ class GetPathService : Service() {
             }
     }
     private fun calculatePaths(){
+        for(startIndex in 0..dataSize)
+            for(goalIndex in 0..dataSize){
+                findPaths.setDistArray(startIndex,goalIndex,pathResultSets[startIndex][goalIndex]!!.route.summary.distance)
+            }
+        shortestNodePaths = findPaths.getPaths(dataSize+1)
+        for(i in 0..dataSize)
+            resultData.add(pathResultSets[i][i+1]!!)
     }
 
     fun getPaths(startIndex: Int, goalIndex: Int){

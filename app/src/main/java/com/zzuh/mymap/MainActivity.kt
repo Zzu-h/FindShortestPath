@@ -33,6 +33,7 @@ var BASE_URL_NAVER_API = ""
 
 var markerData = mutableListOf<Marker>()
 var addressData = mutableListOf<String>()
+var resultData = mutableListOf<PathResult>()
 
 object MessageCode {
     const val READY_SERVICE = 10
@@ -172,6 +173,7 @@ class MainActivity : AppCompatActivity() {
                 for(marker in markerData)
                     marker.map = null
                 markerData.clear()
+                resultData.clear()
                 notifyCallback()
                 binding.searchButton.text = "검색"
                 searchButtonClick = true

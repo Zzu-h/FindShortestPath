@@ -37,4 +37,9 @@ class ResultFragment : Fragment() {
         }
         adapter.notifyDataSetChanged()
     }
+
+    fun uiClear(){
+        resultData.clear()
+        adapter.notifyDataSetChanged()
+    }
 }

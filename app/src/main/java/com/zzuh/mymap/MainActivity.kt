@@ -24,8 +24,6 @@ import com.zzuh.mymap.MessageCode.GET_PATHS
 import com.zzuh.mymap.MessageCode.GET_SERVICE_DONE
 import com.zzuh.mymap.MessageCode.READY_SERVICE
 import com.zzuh.mymap.databinding.LoadingDialogBinding
-import kotlinx.coroutines.delay
-import org.w3c.dom.Text
 
 var CLIENT_ID = ""
 var CLIENT_SECRET = ""
@@ -171,12 +169,9 @@ class MainActivity : AppCompatActivity() {
             }
             else{
                 // Data 초기화
-                addressData.clear()
-                for(marker in markerData)
-                    marker.map = null
-                markerData.clear()
-                resultData.clear()
-                notifyCallback()
+                bottomSheetFragment.uiClear()
+                mapsFragment.uiClear()
+                //notifyCallback()
                 binding.searchButton.text = "검색"
                 searchButtonClick = true
             }

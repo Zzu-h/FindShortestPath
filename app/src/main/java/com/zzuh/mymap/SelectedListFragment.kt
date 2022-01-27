@@ -35,4 +35,8 @@ class SelectedListFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
     }
+    fun uiClear(){
+        addressData.clear()
+        adapter.notifyDataSetChanged()
+    }
 }

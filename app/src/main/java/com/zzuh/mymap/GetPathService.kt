@@ -5,7 +5,6 @@ import android.content.Context
 import android.content.Intent
 import android.os.*
 import android.util.Log
-import com.naver.maps.map.overlay.Marker
 import com.zzuh.mymap.MessageCode.CAL_PATHS
 import com.zzuh.mymap.MessageCode.CAL_SERVICE_DONE
 import com.zzuh.mymap.MessageCode.CONNECT_OK
@@ -69,7 +68,6 @@ class GetPathService : Service() {
     lateinit var api: FindPathInfo
 
     var pathResultSets = Array(10, {Array<PathResult?>(10, { null })})
-    var shortestPaths = emptyArray<PathResult>()
     var shortestNodePaths = IntArray(16)
     var endCount = 0
     var dataSize = 0
@@ -143,11 +141,19 @@ class GetPathService : Service() {
     private fun calculatePaths(){
         for(startIndex in 0..dataSize)
             for(goalIndex in 0..dataSize){
-                findPaths.setDistArray(startIndex,goalIndex,pathResultSets[startIndex][goalIndex]!!.route.summary.distance)
+                findPaths.setDistArray(startIndex,goalIndex,if (startIndex != goalIndex) pathResultSets[startIndex][goalIndex]!!.route.summary.distance else 0)
             }
         shortestNodePaths = findPaths.getPaths(dataSize+1)
-        for(i in 0..dataSize)
-            resultData.add(pathResultSets[i][i+1]!!)
+        for(item in shortestNodePaths)
+            Log.d("tester","$item")
+        /*for(i in 0..(shortestNodePaths.size-2))
+            resultData.add(
+                pathResultSets[
+                        shortestNodePaths[i]
+                ][
+                        shortestNodePaths[i+1]
+                ]!!
+            )*/
     }
 
     fun getPaths(startIndex: Int, goalIndex: Int){
@@ -168,6 +174,7 @@ class GetPathService : Service() {
 
             override fun onResponse(call: Call<PathResult>, response: Response<PathResult>) {
                 result = response.body() as PathResult
+                Log.d("결과:", "성공 : ${result!!.message} $endCount")
                 pathResultSets[startIndex][goalIndex] = result!!
                 endCount -= 1
             }

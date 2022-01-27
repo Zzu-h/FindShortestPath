@@ -136,6 +136,7 @@ class MapsFragment : Fragment(), OnMapReadyCallback, Overlay.OnClickListener, Ha
     }
     fun getResultPath(){
         var list = mutableListOf<LatLng>()
+        list.add(LatLng(latitude,longitude))
 
         for(pathItem in resultData){
             for(item in pathItem.route.path)
@@ -148,8 +149,6 @@ class MapsFragment : Fragment(), OnMapReadyCallback, Overlay.OnClickListener, Ha
 
     fun getAddressForLanLong(marker: Marker, index: Int){
         val lanlong = "${marker.position.longitude},${marker.position.latitude}"
-        //val lanlong = "${marker.position.latitude},${marker.position.longitude}"
-        Log.d("tester", lanlong)
         val retrofit = Retrofit.Builder()
             .baseUrl(BASE_URL_NAVER_API)
             .addConverterFactory(ScalarsConverterFactory.create())
@@ -163,9 +162,7 @@ class MapsFragment : Fragment(), OnMapReadyCallback, Overlay.OnClickListener, Ha
                 call: Call<AddressResult>,
                 response: Response<AddressResult>
             ) {
-                //Log.d("결과", "성공 : ${response}")
                 result = response.body()
-                Log.d("결과", result.toString())
                 if(result!!.status.code == 0)
                     addressData.add("${result!!.results.get(0).region.area1.name} ${result!!.results.get(0).region.area2.name} ${result!!.results.get(0).region.area3.name} ${result!!.results.get(0).region.area4.name}")
                 else{
@@ -174,7 +171,6 @@ class MapsFragment : Fragment(), OnMapReadyCallback, Overlay.OnClickListener, Ha
                 }
                 marker.map = naverMap
                 markerData.add(marker)
-                //selectedListAdapter.notifyDataSetChanged()
                 Log.d("Tester", "send notify")
                 mainActivity.notifyCallback()
             }
@@ -184,5 +180,13 @@ class MapsFragment : Fragment(), OnMapReadyCallback, Overlay.OnClickListener, Ha
                 t.printStackTrace()
             }
         })
+    }
+
+    fun uiClear(){
+        for(marker in markerData)
+            marker.map = null
+        markerData.clear()
+        pathOverlay.coords.clear()
+        pathOverlay.map = null
     }
 }

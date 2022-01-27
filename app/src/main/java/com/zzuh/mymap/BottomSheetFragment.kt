@@ -2,15 +2,12 @@ package com.zzuh.mymap
 
 import android.content.Context
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.FragmentActivity
-import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Lifecycle
-import androidx.viewpager.widget.PagerAdapter
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.zzuh.mymap.databinding.FragmentBottomSheetBinding
 
@@ -56,4 +53,9 @@ class BottomSheetFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View = binding.root
+
+    fun uiClear(){
+        resultFragment.uiClear()
+        selectedListFragment.uiClear()
+    }
 }

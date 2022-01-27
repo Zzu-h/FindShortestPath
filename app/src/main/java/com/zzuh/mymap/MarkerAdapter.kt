@@ -23,8 +23,6 @@ class MarkerAdapter(val address: MutableList<String>,val marker: MutableList<Mar
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         val binding = (holder as MarkerViewHolder).binding
 
-        Log.d("tester", BASE_URL_NAVER_API as String)
-
         binding.itemData.text = address[position]
         binding.itemIndex.text = "${position+1}"
         binding.itemRoot.setOnClickListener {

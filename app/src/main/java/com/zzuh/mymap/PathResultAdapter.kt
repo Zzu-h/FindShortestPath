@@ -22,8 +22,6 @@ class PathResultAdapter(val instruction: MutableList<String>): RecyclerView.Adap
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         val binding = (holder as PathResultViewHolder).binding
 
-        Log.d("tester", BASE_URL_NAVER_API as String)
-
         binding.itemData.text = instruction[position]
         binding.itemIndex.text = "${position+1}"
     }

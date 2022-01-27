@@ -18,6 +18,7 @@
         <entry key="app/src/main/res/layout/fragment_selected_list.xml" value="0.15885416666666666" />
         <entry key="app/src/main/res/layout/item_recyclerview.xml" value="0.21770833333333334" />
         <entry key="app/src/main/res/layout/loading_dialog.xml" value="0.1911231884057971" />
+        <entry key="app/src/main/res/layout/result_recyclerview.xml" value="0.2557291666666667" />
         <entry key="app/src/main/res/layout/top_radius_white_background.xml" value="0.22916666666666666" />
       </map>
     </option>

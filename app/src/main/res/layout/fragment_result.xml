@@ -1,18 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".SelectedListFragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ResultFragment"
+    android:orientation="vertical"
     >
-
     <TextView
-        android:id="@+id/text"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment"
-        android:textSize="20dp"
+        android:layout_height="wrap_content"
+        tools:ignore="MissingConstraints"
+        android:padding="12dp"
+        android:text="가장 최적화된 경로"
+        android:textStyle="bold"
+        android:textSize="18dp"
+        android:id="@+id/listText"
         android:gravity="center"
         />
+    <androidx.recyclerview.widget.RecyclerView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/resultPathRecyclerView"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        app:layout_constraintTop_toBottomOf="@id/listText"
+        />
 
-</FrameLayout>
+</LinearLayout>

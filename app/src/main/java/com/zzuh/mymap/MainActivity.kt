@@ -87,7 +87,9 @@ class MainActivity : AppCompatActivity() {
                 CAL_SERVICE_DONE -> {
                     Log.d("tester Activity", "Receive code CAL_SERVICE_DONE")
                     unbindService(connection)
-                    loadingTextView.text = "처리가 완료되었습니다!"
+                    loadingTextView.text = "처리가 완료되었습니다!\n경로 그리는 중.."
+                    bottomSheetFragment.resultFragment.getResultPath()
+                    mapsFragment.getResultPath()
                     dialog.dismiss()
                 }
                 ERROR_CODE -> {

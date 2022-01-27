@@ -9,9 +9,9 @@ data class PathResult (
 )
 data class Route(
     var summary: Summary,
-    var path: Path,
+    var path: List<List<Double>>,
     var section: List<Section>,
-    var guide: Guide
+    var guide: List<Guide>
 )
 
 data class Summary(
@@ -30,11 +30,6 @@ data class Start(
 data class Goal(
     var location: List<Float>,
     var dir:Int
-)
-data class Path(
-    var id: String,
-    var type: String,
-    var mappingId: String
 )
 data class Section(
     var pointIndex: Int,

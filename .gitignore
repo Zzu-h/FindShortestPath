@@ -184,4 +184,5 @@ fabric.properties
 
 # End of https://www.toptal.com/developers/gitignore/api/androidstudio,kotlin,macos
 
-naver_maps_api.xml
+
+/app/src/debug/res/values/naver_maps_api.xml

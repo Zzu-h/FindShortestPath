@@ -1,0 +1,4 @@
+<resources>
+    <string name="client_id" templateMergeStrategy="preserve" translatable="false">l611cwsx3d</string>
+    <string name="client_secret" templateMergeStrategy="preserve" translatable="false">test</string>
+</resources>
